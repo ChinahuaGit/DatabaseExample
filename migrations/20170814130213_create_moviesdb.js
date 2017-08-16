@@ -26,7 +26,7 @@ function createMovies(knex) {
     table.integer('director_id').notNull();
     table.timestamps(true);
     table.boolean('active');
-    table.foreign('director_id').references('directors.id');
+    table.foreign('director_id').references('directors.id').onDelete('CASCADE');
   });
 }
 
@@ -36,8 +36,8 @@ function createActorsMovies(knex) {
     table.increments().primary();
     table.integer('actor_id').notNull();
     table.integer('movie_id').notNull();
-    table.foreign('actor_id').references('actors.id');
-    table.foreign('movie_id').references('movies.id');
+    table.foreign('actor_id').references('actors.id').onDelete('CASCADE');
+    table.foreign('movie_id').references('movies.id').onDelete('CASCADE');
   });
 }
 
