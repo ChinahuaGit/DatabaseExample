@@ -9,7 +9,8 @@ function createAwards(knex) {
 function createAwardsMovies(knex) {
   return knex.schema.createTableIfNotExists("awards_movies", function(table) {
     table.increments().primary();
-    table.integer('movie_id').notNull();
+    table.integer('movie_id');
+    table.integer('actor_id');
     table.integer('award_id').notNull();
     table.date('award_date').notNull();
     table.timestamps(true);

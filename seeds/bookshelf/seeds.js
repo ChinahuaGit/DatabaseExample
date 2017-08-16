@@ -11,11 +11,21 @@ async function seed() {
   await Movie.where('id', '!=', 0).destroy();
   await Director.where('id', '!=', 0).destroy();
 
-  const CN = await new Director({first_name: 'Christopher', last_name: 'Nolan'}).save();
+  const CN = await new Director({ first_name: 'Christopher', last_name: 'Nolan' }).save();
 
-  const [Batman, Inception] = await Promise.all([
+  const [inception, batman] = await Promise.all([
     CN.movies().create(new Movie({ name: 'Inception', release_date: '2016-01-04' })),
     CN.movies().create(new Movie({ name: 'Batman Begins', release_date: '2008-01-04' }))
+  ]);
+
+  const [LD, CB] = await Promise.all([
+    new Actor({ first_name: 'Leonardo', last_name: 'Di Caprio' }),
+    new Actor({ first_name: 'Christian', last_name: 'Bale' })
+  ]);
+
+  const results = await Promise.all([
+    inception.actors().attach(LD),
+    batman.actors().attach(CB)
   ]);
 
   await Movie.fetchAll({ withRelated: ['actors','director'] })
@@ -25,8 +35,7 @@ async function seed() {
 
 try {
   seed();
-}
-catch(err) {
+} catch(err) {
   console.error('ERROR:', err);
   process.exit(1);
 }
