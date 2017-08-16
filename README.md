@@ -5,3 +5,15 @@ To start the project run the following shell commands.
 createdb moviesdb
 npm install
 ```
+
+To run the knex setup
+```shell
+knex migrate:latest
+knex seed:run
+```
+
+To run the bookshelf seed file.
+```shell
+node seeds/bookshelf/seeds.js
+npm install
+```
