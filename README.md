@@ -15,5 +15,4 @@ knex seed:run
 To run the bookshelf seed file.
 ```shell
 node seeds/bookshelf/seeds.js
-npm install
 ```
