@@ -20,7 +20,7 @@ router.get('/:id', function(req, res, next) {
     }
   })
   .catch(error => {
-    res.status(500).send("unexpected error: " + error)
+    next(error);
   });
 });
 
