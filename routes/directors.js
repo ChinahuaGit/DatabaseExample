@@ -13,7 +13,7 @@ router.get('/:id', function(req, res, next) {
   }).fetch()
   .then(director => {
     if (director == null) {
-      res.status(404).send("not found" + error);
+      res.status(404).send("not found");
     } else {
       res.json(director.toJSON());
     }
