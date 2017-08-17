@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
     res.json(directors.toJSON());
   });
 });
+
 router.get('/:id', function(req, res, next) {
   Directors.where({
     id: req.params.id
@@ -21,7 +22,6 @@ router.get('/:id', function(req, res, next) {
   .catch(error => {
     res.status(500).send("unexpected error: " + error)
   });
-
 });
 
 module.exports = router;
