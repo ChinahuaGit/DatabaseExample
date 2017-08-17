@@ -18,7 +18,7 @@ router.post('/', function(req, res, next) {
 });
 
 router.delete('/:id', function(req, res, next) {
-  Directors.where({ id: req.params.id }).destory()
+  Directors.where({ id: req.params.id }).destroy()
   .then(() => {
     res.status(200).send("Director deleted.");
   });
