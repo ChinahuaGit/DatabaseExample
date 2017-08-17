@@ -12,10 +12,14 @@ router.get('/:id', function(req, res, next) {
     id: req.params.id
   }).fetch()
   .then(director => {
-    res.json(director.toJSON());
+    if (director == null) {
+      res.status(404).send("not found" + error);
+    } else {
+      res.json(director.toJSON());
+    }
   })
   .catch(error => {
-    res.status(404).send("not found" + error)
+    res.status(500).send("unexpected error: " + error)
   });
 
 });
