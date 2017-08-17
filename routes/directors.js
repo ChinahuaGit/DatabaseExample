@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   console.log(req.body);
   new Directors(req.body).save();
-  res.status(200).send("Something happened");
+  res.status(200).send(`Director: ${req.body.first_name} ${req.body.last_name} Added`);
 });
 
 router.delete('/:id', function(req, res, next) {
