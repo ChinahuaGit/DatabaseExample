@@ -18,9 +18,12 @@ router.post('/', function(req, res, next) {
 });
 
 router.patch('/:id', function(req, res, next) {
-  Directors.where({ id: req.params.id }).destroy()
-  .then(() => {
-    res.status(200).send("Director deleted.");
+  Directors.where({ id: req.params.id }).fetch()
+  .then((director) => {
+    if (director !== null) {
+    director.set({first_name: req.body.first_name, last_name: req.body.last_name}).save()
+    }
+
   });
 });
 
