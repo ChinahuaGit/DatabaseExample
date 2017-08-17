@@ -21,7 +21,16 @@ router.patch('/:id', function(req, res, next) {
   Directors.where({ id: req.params.id }).fetch()
   .then((director) => {
     if (director !== null) {
-      director.set({first_name: req.body.first_name, last_name: req.body.last_name}).save().then(() => {
+      let updates = {};
+
+      if (req.body.first_name) {
+        updates.first_name = req.body.first_name;
+      }
+      if (req.body.last_name) {
+        updates.last_name = req.body.last_name;
+      }
+
+      director.set(updates).save().then(() => {
         res.status(200).send(`Director(${req.params.id}): ${req.body.first_name} ${req.body.last_name} Updated`);
       });
     } else {
