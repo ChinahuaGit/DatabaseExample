@@ -14,7 +14,7 @@ router.get('/:id', function(req, res, next) {
   }).fetch()
   .then(director => {
     if (director == null) {
-      res.status(404).send("not found");
+      res.status(404).send("not found" + asdfasf);
     } else {
       res.json(director.toJSON());
     }
