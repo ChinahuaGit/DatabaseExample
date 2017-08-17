@@ -14,9 +14,20 @@ router.get('/', function(req, res, next) {
 
 // CREATE A NEW NOVIE
 router.post('/', function(req, res, next) {
-  console.log(req.body);
   new Movies(req.body).save();
   res.status(200).send(`Movie: ${req.body.first_name} ${req.body.last_name} Added`);
+});
+
+router.post('/director/:id', function (req, res, next) {
+  let movie = {
+    name: req.body.name,
+    release_date: req.body.release_date,
+    director_id: req.params.id
+  };
+
+  new Movies(movie).save().then(m => {
+    res.status(200).send(`Movie: ${req.body.name} ${req.body.release_date} Added`);
+  });
 });
 
 // UPDATE A NOVIE WITH ID=?

@@ -1,47 +1,62 @@
 const express = require('express');
-const Actors = require('../models/actors');
+const Actor = require('../models/actors');
+const Movie = require('../models/movies');
 
 const router = express.Router();
 
 async function getActor(id) {
-  return Actors.where({ id: id }).fetch({withRelated: ['movies']});
+  return Actor.where({ id: id }).fetch({withRelated: ['movies']});
 }
 
 async function addActor(d) {
-  return new Actors(d).save();
+  return new Actor(d).save();
 }
 
-async function updateActor(id, body) {
-  let actor = await Actors.where({
+async function deleteActor(id) {
+  return Actor.where({
     id: id
+  }).destory();
+}
+
+async function addMovieToActor(actor_id, movie_id) {
+  let actor = await Actor.where({
+    id: actor_id
   }).fetch();
 
   if (actor != null) {
-    const updates = {};
-
-    if (body.first_name) {
-      updates.first_name = body.first_name;
-    }
-
-    if (body.last_name) {
-      updates.last_name = body.last_name;
-    }
-
-    return actor.set(updates).save();
+    let movie = await Movie.where({ id: movie_id }).fetch();
+    return actor.movies().attach(movie);
   }
 
   return false;
 }
 
-async function deleteActor(id) {
-  return Actors.where({
-    id: id
-  }).destory();
+async function updateActor(actorId, actorUpdates, movies = []) {
+  let actor = await Actor.where({
+    id: actorId
+  }).fetch();
+
+  if (actor != null) {
+    await actor.set(actorUpdates).save();
+    if (movies.length > 0) {
+      let count = await Movie.where('id', 'IN', movies).count();
+
+      if (count !== movies.length) {
+        return false;
+      }
+
+      //TODO: figure out why it takes a list of IDs
+      await actor.movies().attach(movies);
+    }
+    return true;
+  }
+
+  return false;
 }
 
 // GET ALL THE ACTORS
 router.get('/', function(req, res, next) {
-  Actors.fetchAll({withRelated: ['movies']}).then(actors => {
+  Actor.fetchAll({withRelated: ['movies']}).then(actors => {
       res.json(actors.toJSON());
   })
   .catch(error => {
@@ -53,6 +68,30 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   addActor(req.body).then((d) => {
     res.status(200).send(`Actor: ${req.body.first_name} ${req.body.last_name} Added`);
+  });
+});
+
+router.post('/:actor_id/movie/:movie_id', function(req, res, next) {
+  addMovieToActor(req.params.actor_id, req.params.movie_id).then((d) => {
+    res.status(200).send(`Movie(${req.params.movie_id}) added to Actor(${req.params.actor_id})`);
+  });
+});
+
+router.post('/:actor_id', function(req, res, next) {
+  let actor = {};
+  var movies = [];
+  if (req.body.first_name) {
+    actor.first_name = req.body.first_name;
+  }
+  if (req.body.last_name) {
+    actor.last_name = req.body.last_name;
+  }
+  if (req.body.movies) {
+    movies = req.body.movies;
+  }
+
+  updateActor(req.params.actor_id, actor, movies).then((d) => {
+    res.status(200).send(`Movie(${req.params.movie_id}) added to Actor(${req.params.actor_id})`);
   });
 });
 
