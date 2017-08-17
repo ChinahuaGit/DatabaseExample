@@ -19,5 +19,6 @@ node seeds/bookshelf/seeds.js
 
 To run the express server.
 ```shell
+yarn install
 yarn start
 ```
