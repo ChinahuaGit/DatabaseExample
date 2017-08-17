@@ -16,3 +16,8 @@ To run the bookshelf seed file.
 ```shell
 node seeds/bookshelf/seeds.js
 ```
+
+To run the express server.
+```shell
+yarn start
+```
