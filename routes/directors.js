@@ -7,5 +7,10 @@ router.get('/', function(req, res, next) {
     res.json(directors.toJSON());
   });
 });
+router.get('/:id', function(req, res, next) {
+  Directors.where({id: red.}).fetch().then(directors => {
+    res.json(directors.toJSON());
+  });
+});
 
 module.exports = router;
