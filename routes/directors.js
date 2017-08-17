@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Directors = require('../models/directors')
-/* GET users listing. */
+
+// GET ALL THE DIRECTORS
 router.get('/', function(req, res, next) {
   Directors.fetchAll().then(directors => {
     res.json(directors.toJSON());
@@ -11,12 +12,14 @@ router.get('/', function(req, res, next) {
   });
 });
 
+// CREATE A NEW DIRECTOR
 router.post('/', function(req, res, next) {
   console.log(req.body);
   new Directors(req.body).save();
   res.status(200).send(`Director: ${req.body.first_name} ${req.body.last_name} Added`);
 });
 
+// UPDATE A DIRECTOR WITH ID=?
 router.patch('/:id', function(req, res, next) {
   Directors.where({ id: req.params.id }).fetch()
   .then((director) => {
@@ -39,6 +42,7 @@ router.patch('/:id', function(req, res, next) {
   });
 });
 
+// DELETE A DIRECTOR WITH ID=?
 router.delete('/:id', function(req, res, next) {
   Directors.where({ id: req.params.id }).destroy()
   .then(() => {
@@ -46,6 +50,7 @@ router.delete('/:id', function(req, res, next) {
   });
 });
 
+// GET A DIRECTOR WITH ID=?
 router.get('/:id', function(req, res, next) {
   Directors.where({
     id: req.params.id
