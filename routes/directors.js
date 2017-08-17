@@ -8,8 +8,8 @@ router.get('/', function(req, res, next) {
   });
 });
 router.get('/:id', function(req, res, next) {
-  Directors.where({id: red.}).fetch().then(directors => {
-    res.json(directors.toJSON());
+  Directors.where({ id: req.params.id }).fetch().then(director => {
+    res.json(director.toJSON());
   });
 });
 
