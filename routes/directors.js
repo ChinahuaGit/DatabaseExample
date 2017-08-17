@@ -15,7 +15,7 @@ router.get('/:id', function(req, res, next) {
     res.json(director.toJSON());
   })
   .catch(error => {
-    res.status(404).send("not found")
+    res.status(404).send("not found" + error)
   });
 
 });
