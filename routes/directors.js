@@ -14,7 +14,10 @@ router.get('/:id', function(req, res, next) {
   .then(director => {
     res.json(director.toJSON());
   })
-  .catch(res.status(404).send("not found"));
+  .catch(error => {
+    res.status(404).send("not found")
+  });
+
 });
 
 module.exports = router;
