@@ -8,9 +8,11 @@ router.get('/', function(req, res, next) {
   });
 });
 router.get('/:id', function(req, res, next) {
-  Directors.where({ id: req.params.id }).fetch().then(director => {
+  Directors.where({
+    id: req.params.id
+  }).fetch().then(director => {
     res.json(director.toJSON());
-  });
+  }).catch(res.status(404).send("not found"));
 });
 
 module.exports = router;
