@@ -5,7 +5,14 @@ var Directors = require('../models/directors')
 router.get('/', function(req, res, next) {
   Directors.fetchAll().then(directors => {
     res.json(directors.toJSON());
+  })
+  .catch(error => {
+    next(error);
   });
+});
+
+router.post('/', function(req, res, next) {
+
 });
 
 router.get('/:id', function(req, res, next) {
