@@ -1,29 +1,29 @@
 var express = require('express');
 var router = express.Router();
-var Directors = require('../models/directors')
+var Movies = require('../models/movies')
 
-// GET ALL THE DIRECTORS
+// GET ALL THE NOVIES
 router.get('/', function(req, res, next) {
-  Directors.fetchAll().then(directors => {
-    res.json(directors.toJSON());
+  Movies.fetchAll({withRelated: ['actors', 'director']}).then(movies => {
+    res.json(movies.toJSON());
   })
   .catch(error => {
     next(error);
   });
 });
 
-// CREATE A NEW DIRECTOR
+// CREATE A NEW NOVIE
 router.post('/', function(req, res, next) {
   console.log(req.body);
-  new Directors(req.body).save();
-  res.status(200).send(`Director: ${req.body.first_name} ${req.body.last_name} Added`);
+  new Movies(req.body).save();
+  res.status(200).send(`Movie: ${req.body.first_name} ${req.body.last_name} Added`);
 });
 
-// UPDATE A DIRECTOR WITH ID=?
+// UPDATE A NOVIE WITH ID=?
 router.patch('/:id', function(req, res, next) {
-  Directors.where({ id: req.params.id }).fetch()
-  .then((director) => {
-    if (director !== null) {
+  Movies.where({ id: req.params.id }).fetch()
+  .then((movie) => {
+    if (movie !== null) {
       let updates = {};
 
       if (req.body.first_name) {
@@ -33,8 +33,8 @@ router.patch('/:id', function(req, res, next) {
         updates.last_name = req.body.last_name;
       }
 
-      director.set(updates).save().then(() => {
-        res.status(200).send(`Director(${req.params.id}): ${req.body.first_name} ${req.body.last_name} Updated`);
+      movie.set(updates).save().then(() => {
+        res.status(200).send(`Movie(${req.params.id}): ${req.body.first_name} ${req.body.last_name} Updated`);
       });
     } else {
       res.status(404).send("not found");
@@ -42,24 +42,24 @@ router.patch('/:id', function(req, res, next) {
   });
 });
 
-// DELETE A DIRECTOR WITH ID=?
+// DELETE A NOVIE WITH ID=?
 router.delete('/:id', function(req, res, next) {
-  Directors.where({ id: req.params.id }).destroy()
+  Movies.where({ id: req.params.id }).destroy()
   .then(() => {
-    res.status(200).send("Director deleted.");
+    res.status(200).send("Movie deleted.");
   });
 });
 
-// GET A DIRECTOR WITH ID=?
+// GET A NOVIE WITH ID=?
 router.get('/:id', function(req, res, next) {
-  Directors.where({
+  Movies.where({
     id: req.params.id
-  }).fetch()
-  .then(director => {
-    if (director == null) {
+  }).fetch({withRelated: ['actors', 'director']})
+  .then(movie => {
+    if (movie == null) {
       res.status(404).send("not found");
     } else {
-      res.json(director.toJSON());
+      res.json(movie.toJSON());
     }
   })
   .catch(error => {

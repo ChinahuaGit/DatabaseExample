@@ -4,7 +4,7 @@ const Actors = require('../models/actors');
 const router = express.Router();
 
 async function getActor(id) {
-  return Actors.where({ id: id }).fetch();
+  return Actors.where({ id: id }).fetch({withRelated: ['movies']});
 }
 
 async function addActor(d) {
@@ -39,9 +39,9 @@ async function deleteActor(id) {
   }).destory();
 }
 
-// GET ALL THE DIRECTORS
+// GET ALL THE ACTORS
 router.get('/', function(req, res, next) {
-  Actors.fetchAll().then(actors => {
+  Actors.fetchAll({withRelated: ['movies']}).then(actors => {
       res.json(actors.toJSON());
   })
   .catch(error => {
@@ -49,14 +49,14 @@ router.get('/', function(req, res, next) {
   });
 });
 
-// CREATE A NEW DIRECTOR
+// CREATE A NEW ACTOR
 router.post('/', function(req, res, next) {
   addActor(req.body).then((d) => {
     res.status(200).send(`Actor: ${req.body.first_name} ${req.body.last_name} Added`);
   });
 });
 
-// UPDATE A DIRECTOR WITH ID=?
+// UPDATE A ACTOR WITH ID=?
 router.patch('/:id', function(req, res, next) {
   updateActor(req.params.id, req.body)
   .then((d) => {
@@ -68,7 +68,7 @@ router.patch('/:id', function(req, res, next) {
   });
 });
 
-// DELETE A DIRECTOR WITH ID=?
+// DELETE A ACTOR WITH ID=?
 router.delete('/:id', function(req, res, next) {
   deleteActor(req.params.id)
   .then((d) => {
@@ -76,7 +76,7 @@ router.delete('/:id', function(req, res, next) {
   });
 });
 
-// GET A DIRECTOR WITH ID=?
+// GET A ACTOR WITH ID=?
 router.get('/:id', function(req, res, next) {
   getActor(req.params.id)
   .then((d) => {
