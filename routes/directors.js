@@ -17,6 +17,13 @@ router.post('/', function(req, res, next) {
   res.status(200).send(`Director: ${req.body.first_name} ${req.body.last_name} Added`);
 });
 
+router.patch('/:id', function(req, res, next) {
+  Directors.where({ id: req.params.id }).destroy()
+  .then(() => {
+    res.status(200).send("Director deleted.");
+  });
+});
+
 router.delete('/:id', function(req, res, next) {
   Directors.where({ id: req.params.id }).destroy()
   .then(() => {
