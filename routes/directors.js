@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-
+  new Director({ first_name: 'Christopher', last_name: 'Nolan' }).save(),
 });
 
 router.get('/:id', function(req, res, next) {
