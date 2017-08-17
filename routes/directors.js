@@ -17,6 +17,13 @@ router.post('/', function(req, res, next) {
   res.status(200).send("Something happened");
 });
 
+router.delete('/:id', function(req, res, next) {
+  Directors.where({id: req.params.id}).delete()
+  .then(() => {
+    res.status(200).send("Director deleted.");
+  });
+});
+
 router.get('/:id', function(req, res, next) {
   Directors.where({
     id: req.params.id
