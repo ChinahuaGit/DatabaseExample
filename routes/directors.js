@@ -13,6 +13,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
   console.log(req.body);
+  res.status(200).send("Something happened");
   // new Director({ first_name: 'Christopher', last_name: 'Nolan' }).save();
 });
 
